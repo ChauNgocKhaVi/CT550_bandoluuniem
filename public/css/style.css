@@ -1,0 +1,104 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.text-pink {
+    color: #e91e63;
+}
+
+.bg-pink {
+    background-color: #e91e63;
+}
+
+.btn-outline-pink {
+    border-color: #e91e63;
+    color: #e91e63;
+}
+
+.btn-outline-pink:hover {
+    background-color: #e91e63;
+    color: white;
+}
+
+.nav-link {
+    margin-right: 15px;
+    font-weight: 500;
+}
+
+/* Cố định ảnh của slide */
+#storeCarousel .carousel-item img {
+    height: 400px;
+    object-fit: cover;
+}
+
+
+/* sản phẩm */
+.text-pink {
+    color: #e91e63;
+}
+
+.btn-pink {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+}
+
+.btn-pink:hover {
+    background-color: #d81b60;
+}
+
+.card-body p {
+    margin-bottom: 0.5rem;
+}
+
+
+/* Cho ảnh sản phẩm bằng nhau */
+.card {
+    height: 100%;
+    /* ép chiều cao full */
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body img {
+    object-fit: cover;
+    height: 200px;
+    /* cùng chiều cao ảnh */
+    margin-bottom: 10px;
+}
+
+.card-body button {
+    margin-top: auto;
+    /* đẩy nút xuống cuối */
+}
+
+/* Chủ đề mới ở trang chủ */
+.btn-outline-pink {
+    border-color: #e91e63;
+    color: #e91e63;
+    font-weight: 500;
+}
+
+.btn-outline-pink:hover {
+    background-color: #e91e63;
+    color: white;
+}
+
+.btn-pink {
+    background-color: #e91e63;
+    color: white;
+    font-weight: 500;
+    border: none;
+}
+
+.btn-pink:hover {
+    background-color: #d81b60;
+}
+
+.card h6 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
