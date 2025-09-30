@@ -1,18 +1,67 @@
 <?php
 require_once __DIR__ . '/../src/bootstrap.php';
 
+use CT550\Labs\User;
+
+$message = "";
+
+// Xử lý khi submit form đăng ký
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
+    $username   = trim($_POST['username']);
+    $full_name  = trim($_POST['full_name']);
+    $email      = trim($_POST['email']);
+    $phone      = trim($_POST['phone_number']);
+    $password   = $_POST['password'];
+    $confirm_pw = $_POST['confirm_password'];
+
+    if ($password !== $confirm_pw) {
+        $message = "❌ Mật khẩu xác nhận không khớp.";
+    } else {
+        try {
+            $user = new User($PDO); // $pdo có trong bootstrap.php
+            $ok = $user->register($username, $full_name, $email, $password, $phone);
+
+            if ($ok) {
+                $message = "✅ Đăng ký thành công! Bạn có thể đăng nhập.";
+            }
+        } catch (Exception $e) {
+            $message = "❌ Lỗi: " . $e->getMessage();
+        }
+    }
+}
+
+// Xử lý đăng nhập
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+    $usernameOrEmail = $_POST['username_or_email'] ?? '';  // đúng name trong form
+    $password = $_POST['password'] ?? '';
+    $user = new User($PDO);
+    $result = $user->login($usernameOrEmail, $password);
+
+    if ($result) {
+        session_start();
+        $_SESSION['user'] = $result;
+        
+        // ✅ Chuyển hướng về trang chủ
+        header("Location: index.php");
+        exit;
+    } else {
+        $message = "Sai tên đăng nhập/email hoặc mật khẩu!";
+    }
+}
+
 include __DIR__ . '/../src/partials/head.php';
 include __DIR__ . '/../src/partials/header.php';
-
 ?>
 
-<nav aria-label="breadcrumb" class="mt-3">
-    <ol class="breadcrumb" id="breadcrumb">
-        <!-- Tự động sinh nội dung -->
-    </ol>
-</nav>
+
 
 <body class="bg-light">
+    <?php if (!empty($message)): ?>
+    <div class="alert alert-info text-center">
+        <?= htmlspecialchars($message) ?>
+    </div>
+    <?php endif; ?>
     <div class="container py-5">
         <div class="card mx-auto shadow-lg rounded-4" style="max-width: 500px;">
             <div class="card-header bg-white border-0 text-center">
@@ -25,61 +74,72 @@ include __DIR__ . '/../src/partials/header.php';
 
                 <!-- Đăng nhập -->
                 <div id="login-tab">
-                    <div class="mb-3">
-                        <label class="form-label">Email hoặc tên đăng nhập</label>
-                        <input type="text" class="form-control rounded-pill"
-                            placeholder="Nhập email hoặc tên đăng nhập">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Mật khẩu</label>
-                        <input type="password" class="form-control rounded-pill" placeholder="Nhập mật khẩu">
-                    </div>
-                    <div class="d-grid mb-2">
-                        <button class="btn btn-pink rounded-pill">ĐĂNG NHẬP</button>
-                    </div>
-                    <div class="text-end mb-3">
-                        <a href="#" class="text-decoration-none text-pink">Quên mật khẩu?</a>
-                    </div>
-                    <div class="text-center text-muted mb-2">Hoặc đăng nhập với</div>
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-facebook rounded-pill">Đăng nhập bằng Facebook</button>
-                        <button class="btn btn-google rounded-pill">Đăng nhập bằng Google</button>
-                    </div>
+                    <form method="POST" action="">
+                        <div class="mb-3">
+                            <label class="form-label">Email hoặc tên đăng nhập</label>
+                            <input type="text" name="username_or_email" class="form-control rounded-pill"
+                                placeholder="Nhập email hoặc tên đăng nhập" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu</label>
+                            <input type="password" name="password" class="form-control rounded-pill"
+                                placeholder="Nhập mật khẩu" required>
+                        </div>
+                        <div class="d-grid mb-2">
+                            <button type="submit" name="login" class="btn btn-pink rounded-pill">ĐĂNG NHẬP</button>
+                        </div>
+                        <div class="text-end mb-3">
+                            <a href="#" class="text-decoration-none text-pink">Quên mật khẩu?</a>
+                        </div>
+                        <div class="text-center text-muted mb-2">Hoặc đăng nhập với</div>
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-facebook rounded-pill">Đăng nhập bằng Facebook</button>
+                            <button type="button" class="btn btn-google rounded-pill">Đăng nhập bằng Google</button>
+                        </div>
+                    </form>
                 </div>
 
                 <!-- Đăng ký -->
                 <div id="register-tab" style="display: none;">
-                    <div class="mb-2">
-                        <label class="form-label">Tên đăng nhập *</label>
-                        <input type="text" class="form-control rounded-pill" placeholder="Nhập tên đăng nhập">
-                    </div>
-                    <!-- Họ tên -->
-                    <div class="mb-2">
-                        <label class="form-label">Họ tên *</label>
-                        <input type="text" class="form-control rounded-pill" placeholder="Nhập họ tên">
-                    </div>
-                    <!-- Điện thoại -->
-                    <div class="mb-2">
-                        <label class="form-label">Điện thoại *</label>
-                        <input type="tel" class="form-control rounded-pill" placeholder="Nhập số điện thoại">
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label">Email *</label>
-                        <input type="email" class="form-control rounded-pill" placeholder="Nhập email">
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label">Mật khẩu *</label>
-                        <input type="password" class="form-control rounded-pill" placeholder="Tạo mật khẩu">
-                    </div>
-                    <!-- Nhập lại mật khẩu -->
-                    <div class="mb-4">
-                        <label class="form-label">Nhập lại mật khẩu *</label>
-                        <input type="password" class="form-control rounded-pill" placeholder="Xác nhận mật khẩu">
-                    </div>
+                    <form method="POST" action="">
+                        <div class="mb-2">
+                            <label class="form-label">Tên đăng nhập *</label>
+                            <input type="text" name="username" class="form-control rounded-pill"
+                                placeholder="Nhập tên đăng nhập" required>
+                        </div>
+                        <!-- Họ tên -->
+                        <div class="mb-2">
+                            <label class="form-label">Họ tên *</label>
+                            <input type="text" name="full_name" class="form-control rounded-pill"
+                                placeholder="Nhập họ tên" required>
+                        </div>
+                        <!-- Điện thoại -->
+                        <div class="mb-2">
+                            <label class="form-label">Điện thoại *</label>
+                            <input type="tel" name="phone_number" class="form-control rounded-pill"
+                                placeholder="Nhập số điện thoại">
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Email *</label>
+                            <input type="email" name="email" class="form-control rounded-pill" placeholder="Nhập email"
+                                required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">Mật khẩu *</label>
+                            <input type="password" name="password" class="form-control rounded-pill"
+                                placeholder="Tạo mật khẩu" required>
+                        </div>
+                        <!-- Nhập lại mật khẩu -->
+                        <div class="mb-4">
+                            <label class="form-label">Nhập lại mật khẩu *</label>
+                            <input type="password" name="confirm_password" class="form-control rounded-pill"
+                                placeholder="Xác nhận mật khẩu" required>
+                        </div>
 
-                    <div class="d-grid">
-                        <button class="btn btn-pink rounded-pill">ĐĂNG KÝ</button>
-                    </div>
+                        <div class="d-grid">
+                            <button type="submit" name="register" class="btn btn-pink rounded-pill">ĐĂNG KÝ</button>
+                        </div>
+                    </form>
                 </div>
 
             </div>
