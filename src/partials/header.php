@@ -1,3 +1,7 @@
+<?php
+session_start(); // thêm để đảm bảo dùng session
+?>
+
 <!-- Header -->
 <header class="bg-white shadow-sm py-3">
     <div class="container d-flex justify-content-between align-items-center">
@@ -14,8 +18,31 @@
             </div>
         </div>
         <div class="icons d-flex gap-3">
+            <?php if (isset($_SESSION['user'])): ?>
+            <!-- Nếu đã đăng nhập -->
+            <div class="dropdown">
+                <button class="btn btn-outline-pink dropdown-toggle d-flex align-items-center gap-2" type="button"
+                    id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle text-pink"></i>
+                    <span class="fw-bold text-pink">
+                        <?= htmlspecialchars($_SESSION['user']['username']) ?>
+                    </span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="userMenu">
+                    <li>
+                        <form method="POST" action="logout.php" class="m-0">
+                            <button type="submit" class="dropdown-item text-danger">Đăng xuất</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <?php else: ?>
+            <!-- Nếu chưa đăng nhập -->
             <button class="btn btn-outline-pink" onclick="window.location.href='dang_nhap.php'">
-                <i class="bi bi-person"></i></button>
+                <i class="bi bi-person"></i>
+            </button>
+            <?php endif; ?>
+
             <button class="btn btn-outline-pink"><i class="bi bi-cart"></i></button>
         </div>
     </div>
@@ -43,3 +70,10 @@
         </div>
     </div>
 </nav>
+
+<style>
+#userMenu:hover i,
+#userMenu:hover span {
+    color: #fff !important;
+}
+</style>

@@ -11,7 +11,7 @@ $loader->addNamespace('CT550\Labs', __DIR__ . '/classes');
 try {
     $PDO = (new \CT550\Labs\PDOFactory())->create([
         'dbhost' => 'localhost',
-        'dbname' => 'thu_vien',
+        'dbname' => 'doluuniem_db',
         'dbuser' => 'root',
         'dbpass' => ''
     ]);
