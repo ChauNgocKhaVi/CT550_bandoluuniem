@@ -2,40 +2,18 @@
 require_once __DIR__ . '/../src/bootstrap.php';
 include __DIR__ . '/../src/partials/head.php';
 include __DIR__ . '/../src/partials/header.php';
+
 ?>
 
+
 <body>
-
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg bg-pink navbar-dark">
-        <div class="container">
-            <!-- Nút toggle khi màn hình nhỏ -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Menu -->
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a href="#" class="nav-link text-white">VỀ VIET MEMORIES</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white">SẢN PHẨM MỚI</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white">DANH MỤC SẢN PHẨM</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white">💝 DEAL HOT DƯỚI 100K 💝</a></li>
-                    <li class="nav-item">
-                        <NG href="#" class="nav-link text-white">THƯƠNG HIỆU</NG>
-                    </li>
-                    <li class="nav-item"><a href="#" class="nav-link text-white">TIN TỨC</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
     <!-- Slide thông báo -->
     <div id="storeCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <!-- Slide 1 -->
             <div class="carousel-item active">
-                <img src="anh/tb1.jpg" gitclass="d-block w-100" alt="Thông báo 1">
+                <img src="anh/tb1.jpg" class="d-block w-100" alt="Thông báo 1">
             </div>
             <!-- Slide 2 -->
             <div class="carousel-item">
@@ -240,7 +218,7 @@ include __DIR__ . '/../src/partials/header.php';
         </div>
     </div>
 
-    <div class="container my-4 pt-5">
+    <div class="container my-4 pt-3">
         <h4 class="fw-bold text-pink">Chủ đề mới</h4>
     </div>
 

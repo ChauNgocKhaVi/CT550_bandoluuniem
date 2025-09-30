@@ -20,3 +20,26 @@
         </div>
     </div>
 </header>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg bg-pink navbar-dark">
+    <div class="container">
+        <!-- Nút toggle khi màn hình nhỏ -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu -->
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a href="#" class="nav-link text-white">VỀ VIET MEMORIES</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white">SẢN PHẨM MỚI</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white">DANH MỤC SẢN PHẨM</a></li>
+                <li class="nav-item"><a href="#" class="nav-link text-white">💝 DEAL HOT DƯỚI 100K 💝</a></li>
+                <li class="nav-item">
+                    <NG href="#" class="nav-link text-white">THƯƠNG HIỆU</NG>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link text-white">TIN TỨC</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
