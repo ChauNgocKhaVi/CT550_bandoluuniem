@@ -3,7 +3,9 @@ require_once __DIR__ . '/../src/bootstrap.php';
 
 use CT550\Labs\User;
 
-$message = "";
+$register_message = "";
+$login_message = "";
+$activeTab = "login"; // mặc định ban đầu
 
 // Xử lý khi submit form đăng ký
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
@@ -15,38 +17,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     $confirm_pw = $_POST['confirm_password'];
 
     if ($password !== $confirm_pw) {
-        $message = "❌ Mật khẩu xác nhận không khớp.";
+        $register_message = "❌ Mật khẩu xác nhận không khớp.";
+        $activeTab = "register"; //Lỗi vẫn ở lại trang đăng ký
     } else {
         try {
-            $user = new User($PDO); // $pdo có trong bootstrap.php
+            $user = new User($PDO); 
             $ok = $user->register($username, $full_name, $email, $password, $phone);
 
             if ($ok) {
-                $message = "✅ Đăng ký thành công! Bạn có thể đăng nhập.";
+                $login_message = "✅ Đăng ký thành công! Bạn có thể đăng nhập.";
+                $activeTab = "login";
             }
         } catch (Exception $e) {
-            $message = "❌ Lỗi: " . $e->getMessage();
+            $register_message = "❌ Lỗi: " . $e->getMessage();
+            $activeTab = "register"; //Lỗi vẫn ở lại trang đăng ký
         }
     }
 }
 
 // Xử lý đăng nhập
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
-    $usernameOrEmail = $_POST['username_or_email'] ?? '';  // đúng name trong form
+    $usernameOrEmail = $_POST['username_or_email'] ?? '';
     $password = $_POST['password'] ?? '';
+
     $user = new User($PDO);
     $result = $user->login($usernameOrEmail, $password);
 
     if ($result) {
         session_start();
         $_SESSION['user'] = $result;
+
+
+       // Kiểm tra role và chuyển hướng
+        if ($result['role'] === 'admin') {
+            
+            header("Location: index_admin.php");
+            exit;
+        } else {
+            header("Location: index.php");
+            exit;
+        }
         
-        // ✅ Chuyển hướng về trang chủ
-        header("Location: index.php");
-        exit;
     } else {
-        $message = "Sai tên đăng nhập/email hoặc mật khẩu!";
+        $login_message = "❌ Sai tên đăng nhập/email hoặc mật khẩu!";
+        $activeTab = "login";
     }
 }
 
@@ -56,14 +70,10 @@ include __DIR__ . '/../src/partials/header.php';
 
 
 
+
 <body class="bg-light">
-    <?php if (!empty($message)): ?>
-    <div class="alert alert-info text-center">
-        <?= htmlspecialchars($message) ?>
-    </div>
-    <?php endif; ?>
     <div class="container py-5">
-        <div class="card mx-auto shadow-lg rounded-4" style="max-width: 500px;">
+        <div class="card mx-auto shadow-lg rounded-4 w-100 h-auto" style="max-width: 500px;">
             <div class="card-header bg-white border-0 text-center">
                 <div class="btn-group w-100" role="group">
                     <button type="button" class="btn btn-tab active" onclick="showTab('login')">ĐĂNG NHẬP</button>
@@ -75,6 +85,22 @@ include __DIR__ . '/../src/partials/header.php';
                 <!-- Đăng nhập -->
                 <div id="login-tab">
                     <form method="POST" action="">
+                        <?php if (!empty($login_message)): ?>
+                        <div class="alert alert-warning"><?= $login_message ?></div>
+                        <?php endif; ?>
+
+                        <?php if (!empty($errors)): ?>
+                        <div style="color:red;">
+                            <?php foreach ($errors as $err): ?>
+                            <p><?= $err ?></p>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+
+                        <?php if (!empty($message)): ?>
+                        <div style="color:green;"><?= $message ?></div>
+                        <?php endif; ?>
+
                         <div class="mb-3">
                             <label class="form-label">Email hoặc tên đăng nhập</label>
                             <input type="text" name="username_or_email" class="form-control rounded-pill"
@@ -88,8 +114,8 @@ include __DIR__ . '/../src/partials/header.php';
                         <div class="d-grid mb-2">
                             <button type="submit" name="login" class="btn btn-pink rounded-pill">ĐĂNG NHẬP</button>
                         </div>
-                        <div class="text-end mb-3">
-                            <a href="#" class="text-decoration-none text-pink">Quên mật khẩu?</a>
+                        <div class="text-center mb-3">
+                            <a href="#" class="text-decoration-none text-pink small">Quên mật khẩu?</a>
                         </div>
                         <div class="text-center text-muted mb-2">Hoặc đăng nhập với</div>
                         <div class="d-grid gap-2">
@@ -100,8 +126,12 @@ include __DIR__ . '/../src/partials/header.php';
                 </div>
 
                 <!-- Đăng ký -->
-                <div id="register-tab" style="display: none;">
+                <div id="register-tab" class="d-none">
                     <form method="POST" action="">
+                        <?php if (!empty($register_message)): ?>
+                        <div class="alert alert-warning"><?= $register_message ?></div>
+                        <?php endif; ?>
+
                         <div class="mb-2">
                             <label class="form-label">Tên đăng nhập *</label>
                             <input type="text" name="username" class="form-control rounded-pill"
@@ -159,7 +189,7 @@ body {
 .btn-tab {
     background-color: #f8f9fa;
     border: none;
-    font-weight: 600;
+    font-weight: 900;
     color: #e91e63;
     padding: 10px 0;
 }
@@ -190,16 +220,42 @@ body {
     font-weight: 500;
 }
 
+.btn-facebook:hover {
+    background-color: #f8f9fa;
+    color: #3b5998;
+    border: 3px solid #3b5998;
+}
+
 .btn-google {
     background-color: #db4437;
     color: white;
     font-weight: 500;
 }
+
+.btn-google:hover {
+    background-color: #f8f9fa;
+    color: #db4437;
+    border: 3px solid #db4437;
+}
 </style>
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+    showTab("<?= $activeTab ?>");
+});
+</script>
+
+<script>
 function showTab(tab) {
-    document.getElementById('login-tab').style.display = tab === 'login' ? 'block' : 'none';
-    document.getElementById('register-tab').style.display = tab === 'register' ? 'block' : 'none';
+    const loginTab = document.getElementById('login-tab');
+    const registerTab = document.getElementById('register-tab');
+
+    if (tab === 'login') {
+        loginTab.classList.remove('d-none');
+        registerTab.classList.add('d-none');
+    } else {
+        registerTab.classList.remove('d-none');
+        loginTab.classList.add('d-none');
+    }
 
     const buttons = document.querySelectorAll('.btn-tab');
     buttons.forEach(btn => btn.classList.remove('active'));
