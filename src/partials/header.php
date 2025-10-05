@@ -31,6 +31,13 @@ session_start(); // thêm để đảm bảo dùng session
                 <ul class="dropdown-menu" aria-labelledby="userMenu">
                     <li>
                         <form method="POST" action="logout.php" class="m-0">
+                            <button type="submit" class="dropdown-item text-danger">Thông tin tài khoản</button>
+
+                        </form>
+                    </li>
+                    <li>
+                        <form method="POST" action="logout.php" class="m-0">
+
                             <button type="submit" class="dropdown-item text-danger">Đăng xuất</button>
                         </form>
                     </li>
