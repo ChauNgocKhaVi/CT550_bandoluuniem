@@ -120,7 +120,11 @@ include __DIR__ . '/../src/partials/header.php';
                         <div class="text-center text-muted mb-2">Hoặc đăng nhập với</div>
                         <div class="d-grid gap-2">
                             <button type="button" class="btn btn-facebook rounded-pill">Đăng nhập bằng Facebook</button>
-                            <button type="button" class="btn btn-google rounded-pill">Đăng nhập bằng Google</button>
+                            <a href="google_login.php"
+                                class="btn btn-google rounded-pill text-center text-decoration-none">
+                                Đăng nhập bằng Google
+                            </a>
+
                         </div>
                     </form>
                 </div>
