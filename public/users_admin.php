@@ -15,6 +15,8 @@ $pdo = $PDO;
 $stmt = $pdo->query("SELECT user_id, username, full_name, email, phone_number, role, created_at FROM Users WHERE role = 'customer' ORDER BY created_at DESC");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+
 include __DIR__ . '/../src/partials/head.php';
 include __DIR__ . '/../src/partials/header_admin.php';
 ?>
@@ -40,6 +42,13 @@ include __DIR__ . '/../src/partials/header_admin.php';
             <i class="bi bi-person-plus"></i> Thêm mới
         </a>
     </div>
+    <!-- Hiển thị thông báo sau khi xóa -->
+    <?php if (isset($_SESSION['message'])): ?>
+    <div class="mt-3">
+        <?= $_SESSION['message']; ?>
+    </div>
+    <?php unset($_SESSION['message']); ?>
+    <?php endif; ?>
 
     <table class="table table-bordered table-hover align-middle shadow-sm rounded">
         <thead class="table-primary text-center">
