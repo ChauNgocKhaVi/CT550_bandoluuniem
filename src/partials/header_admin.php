@@ -53,7 +53,7 @@ $current_page = basename($_SERVER['PHP_SELF']); // Lấy tên file hiện tại,
 
 <div class="d-flex">
     <!-- Sidebar cho desktop -->
-    <div class="bg-white border-end shadow-sm d-none d-lg-block" id="sidebar" style="width: 250px; min-height: 100vh;">
+    <div class="bg-white border-end shadow-sm d-none d-lg-block" id="sidebar" style="width: 300px; min-height: 100vh;">
 
         <ul class="nav flex-column p-3">
             <li class="nav-item">
@@ -65,6 +65,12 @@ $current_page = basename($_SERVER['PHP_SELF']); // Lấy tên file hiện tại,
                 <a class="nav-link <?= $current_page == 'products_admin.php' ? 'active' : '' ?>"
                     href="products_admin.php">
                     <i class="bi bi-box-seam me-2"></i> Sản phẩm
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= $current_page == 'categories_admin.php' ? 'active' : '' ?>"
+                    href="categories_admin.php">
+                    <i class="bi bi-box-seam me-2"></i> Danh mục sản phẩm
                 </a>
             </li>
             <li class="nav-item">
