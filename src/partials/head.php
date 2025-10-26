@@ -9,4 +9,8 @@
     <link rel="stylesheet" href="/css/style.css">
     <title><?php echo $pageTitle ?? 'Trang mặc định'; ?></title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Icons -->
+
+
+
 </head>

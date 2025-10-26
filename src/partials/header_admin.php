@@ -74,6 +74,11 @@ $current_page = basename($_SERVER['PHP_SELF']); // Lấy tên file hiện tại,
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link <?= $current_page == 'brands_admin.php' ? 'active' : '' ?>" href="brands_admin.php">
+                    <i class="bi bi-box-seam me-2"></i> Thương hiệu
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link <?= $current_page == 'orders_admin.php' ? 'active' : '' ?>" href="orders_admin.php">
                     <i class="bi bi-cart-check me-2"></i> Đơn hàng
                 </a>
