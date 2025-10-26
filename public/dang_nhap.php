@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../src/bootstrap.php';
 
+
+
+
 use CT550\Labs\User;
 
 $register_message = "";
@@ -21,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         $activeTab = "register"; //Lỗi vẫn ở lại trang đăng ký
     } else {
         try {
-            $user = new User($PDO); 
+            $user = new User($PDO);
             $ok = $user->register($username, $full_name, $email, $password, $phone);
 
             if ($ok) {
@@ -46,18 +49,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     if ($result) {
         session_start();
         $_SESSION['user'] = $result;
+        $_SESSION['tab_active'] = true;
 
-
-       // Kiểm tra role và chuyển hướng
+        // Kiểm tra role và chuyển hướng
         if ($result['role'] === 'admin') {
-            
+
             header("Location: index_admin.php");
             exit;
         } else {
             header("Location: index.php");
             exit;
         }
-        
     } else {
         $login_message = "❌ Sai tên đăng nhập/email hoặc mật khẩu!";
         $activeTab = "login";
@@ -114,12 +116,12 @@ include __DIR__ . '/../src/partials/header.php';
                         <div class="d-grid mb-2">
                             <button type="submit" name="login" class="btn btn-pink rounded-pill">ĐĂNG NHẬP</button>
                         </div>
-                        <div class="text-center mb-3">
+                        <!-- <div class="text-center mb-3">
                             <a href="#" class="text-decoration-none text-pink small">Quên mật khẩu?</a>
-                        </div>
+                        </div> -->
                         <div class="text-center text-muted mb-2">Hoặc đăng nhập với</div>
                         <div class="d-grid gap-2">
-                            <button type="button" class="btn btn-facebook rounded-pill">Đăng nhập bằng Facebook</button>
+                            <!-- <button type="button" class="btn btn-facebook rounded-pill">Đăng nhập bằng Facebook</button> -->
                             <a href="google_login.php"
                                 class="btn btn-google rounded-pill text-center text-decoration-none">
                                 Đăng nhập bằng Google

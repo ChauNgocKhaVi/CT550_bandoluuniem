@@ -16,7 +16,8 @@ $query = "
     SELECT 
         p.product_id, 
         p.product_name, 
-        c.category_name, 
+        c.category_name,
+        b.brand_name, 
         p.description, 
         p.original_price, 
         p.price, 
@@ -25,6 +26,7 @@ $query = "
         p.created_at 
     FROM Products p
     LEFT JOIN Categories c ON p.category_id = c.category_id
+    LEFT JOIN Brands b ON p.brand_id = b.brand_id
     ORDER BY p.created_at DESC
 ";
 $stmt = $pdo->query($query);
@@ -56,10 +58,10 @@ include __DIR__ . '/../src/partials/header_admin.php';
 
     <!-- Hiển thị thông báo -->
     <?php if (isset($_SESSION['message'])): ?>
-    <div class="mt-3">
-        <?= $_SESSION['message']; ?>
-    </div>
-    <?php unset($_SESSION['message']); ?>
+        <div class="mt-3">
+            <?= $_SESSION['message']; ?>
+        </div>
+        <?php unset($_SESSION['message']); ?>
     <?php endif; ?>
 
     <table class="table table-bordered table-hover align-middle shadow-sm rounded">
@@ -69,6 +71,7 @@ include __DIR__ . '/../src/partials/header_admin.php';
                 <th>Ảnh</th>
                 <th>Tên sản phẩm</th>
                 <th>Thể loại</th>
+                <th>Thương hiệu</th>
                 <th>Giá gốc (₫)</th>
                 <th>Giá bán (₫)</th>
                 <th>Tồn kho</th>
@@ -78,45 +81,45 @@ include __DIR__ . '/../src/partials/header_admin.php';
         </thead>
         <tbody>
             <?php if (!empty($products)): ?>
-            <?php foreach ($products as $product): ?>
-            <tr>
-                <td><?= $product['product_id'] ?></td>
-                <td>
-                    <?php if (!empty($product['image'])): ?>
-                    <img src="../<?= htmlspecialchars($product['image']) ?>"
-                        alt="<?= htmlspecialchars($product['product_name']) ?>" width="60" height="60"
-                        class="rounded shadow-sm">
-                    <?php else: ?>
-                    <span class="text-muted">Không có ảnh</span>
-                    <?php endif; ?>
-                </td>
+                <?php foreach ($products as $product): ?>
+                    <tr>
+                        <td><?= $product['product_id'] ?></td>
+                        <td>
+                            <?php if (!empty($product['image'])): ?>
+                                <!-- htmlspecialchars($product['image'])  -->
+                                <img src="<?= htmlspecialchars($product['image']) ?>"
+                                    alt="<?= htmlspecialchars($product['product_name']) ?>" width="60" height="60"
+                                    class="rounded shadow-sm">
+                            <?php else: ?>
+                                <span class="text-muted">Không có ảnh</span>
+                            <?php endif; ?>
+                        </td>
 
+                        <td class="text-start"><?= htmlspecialchars($product['product_name']) ?></td>
+                        <td><?= htmlspecialchars($product['category_name'] ?? 'Chưa phân loại') ?></td>
+                        <td><?= htmlspecialchars($product['brand_name'] ?? 'Chưa thương hiệu') ?></td>
+                        <td><?= number_format($product['original_price'], 0, ',', '.') ?></td>
+                        <td class="text-danger fw-bold"><?= number_format($product['price'], 0, ',', '.') ?></td>
+                        <td><?= $product['stock_quantity'] ?></td>
 
-
-                <td class="text-start"><?= htmlspecialchars($product['product_name']) ?></td>
-                <td><?= htmlspecialchars($product['category_name'] ?? 'Chưa phân loại') ?></td>
-                <td><?= number_format($product['original_price'], 0, ',', '.') ?></td>
-                <td class="text-danger fw-bold"><?= number_format($product['price'], 0, ',', '.') ?></td>
-                <td><?= $product['stock_quantity'] ?></td>
-
-                <td><?= date('d/m/Y H:i', strtotime($product['created_at'])) ?></td>
-                <td class="text-center">
-                    <a href="edit_product.php?id=<?= $product['product_id'] ?>"
-                        class="btn btn-sm btn-outline-primary me-1">
-                        <i class="bi bi-pencil"></i> Sửa
-                    </a>
-                    <a href="delete_product.php?id=<?= $product['product_id'] ?>"
-                        onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?');"
-                        class="btn btn-sm btn-outline-danger">
-                        <i class="bi bi-trash"></i> Xóa
-                    </a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
+                        <td><?= date('d/m/Y H:i', strtotime($product['created_at'])) ?></td>
+                        <td class="text-center">
+                            <a href="edit_product.php?id=<?= $product['product_id'] ?>"
+                                class="btn btn-sm btn-outline-primary me-1 ">
+                                <i class="bi bi-pencil"></i> Sửa
+                            </a>
+                            <a href="delete_product.php?id=<?= $product['product_id'] ?>"
+                                onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này không?');"
+                                class="btn btn-sm btn-outline-danger mt-2">
+                                <i class="bi bi-trash"></i> Xóa
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             <?php else: ?>
-            <tr>
-                <td colspan="9" class="text-center text-muted">Không có sản phẩm nào.</td>
-            </tr>
+                <tr>
+                    <td colspan="9" class="text-center text-muted">Không có sản phẩm nào.</td>
+                </tr>
             <?php endif; ?>
         </tbody>
     </table>
@@ -124,46 +127,46 @@ include __DIR__ . '/../src/partials/header_admin.php';
 
 <!-- CSS -->
 <style>
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #f8f9fa;
-}
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f8f9fa;
+    }
 
-#sidebar .nav-link {
-    font-weight: 500;
-    color: #333;
-    padding: 10px 15px;
-    transition: all 0.3s ease;
-}
+    #sidebar .nav-link {
+        font-weight: 500;
+        color: #333;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
 
-#sidebar .nav-link:hover {
-    background-color: #e3f2fd;
-    color: #e91e63;
-    border-radius: 8px;
-}
+    #sidebar .nav-link:hover {
+        background-color: #e3f2fd;
+        color: #e91e63;
+        border-radius: 8px;
+    }
 
-#sidebar .nav-link.active {
-    background-color: #e91e63;
-    color: white;
-    border-radius: 8px;
-}
+    #sidebar .nav-link.active {
+        background-color: #e91e63;
+        color: white;
+        border-radius: 8px;
+    }
 
-/* Bảng hiển thị rõ ràng hơn */
-.table {
-    width: 100%;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-}
+    /* Bảng hiển thị rõ ràng hơn */
+    .table {
+        width: 100%;
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+    }
 
-.table th,
-.table td {
-    vertical-align: middle;
-    text-align: center;
-}
+    .table th,
+    .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
 
-.table thead th {
-    background-color: #e91e63;
-    color: white;
-}
+    .table thead th {
+        background-color: #e91e63;
+        color: white;
+    }
 </style>

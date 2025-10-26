@@ -11,43 +11,7 @@ include __DIR__ . '/../src/partials/head.php';
 include __DIR__ . '/../src/partials/header_admin.php';
 ?>
 
-<body>
 
-
-    <!-- Main Content -->
-    <div class="p-4 flex-grow-1">
-        <h2>Bảng điều khiển</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card text-bg-primary mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Tổng sản phẩm</h5>
-                        <p class="card-text">120 sản phẩm đang hoạt động</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-bg-success mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Đơn hàng hôm nay</h5>
-                        <p class="card-text">35 đơn hàng mới</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card text-bg-warning mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Người dùng mới</h5>
-                        <p class="card-text">8 tài khoản đăng ký</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-</body>
 
 <style>
 body {

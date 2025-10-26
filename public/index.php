@@ -1,5 +1,10 @@
 <?php
 require_once __DIR__ . '/../src/bootstrap.php';
+
+
+
+
+
 include __DIR__ . '/../src/partials/head.php';
 include __DIR__ . '/../src/partials/header.php';
 
@@ -7,6 +12,8 @@ include __DIR__ . '/../src/partials/header.php';
 
 
 <body>
+
+
 
     <!-- Slide thông báo -->
     <div id="storeCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -316,6 +323,8 @@ include __DIR__ . '/../src/partials/header.php';
 </body>
 
 </html>
+
+
 
 
 <script>
