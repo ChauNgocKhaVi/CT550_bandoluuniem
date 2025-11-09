@@ -14,25 +14,32 @@ CREATE TABLE Users (
 -- Bảng danh mục sản phẩm
 CREATE TABLE Categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
-    parent_id INT DEFAULT NULL,
-    category_name VARCHAR(100) NOT NULL,
-    description TEXT,
-    FOREIGN KEY (parent_id) REFERENCES Categories(category_id)
+    category_name VARCHAR(100) NOT NULL
+    
 );
 
--- Bảng sản phẩm
+-- 🔹 Bảng thương hiệu (đơn giản)
+CREATE TABLE Brands (
+    brand_id INT AUTO_INCREMENT PRIMARY KEY,
+    brand_name VARCHAR(100) NOT NULL
+);
+
+-- 🔹 Bảng sản phẩm
 CREATE TABLE Products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT,
+    brand_id INT,
     product_name VARCHAR(150) NOT NULL,
     description TEXT,
     original_price DECIMAL(10,2),
     price DECIMAL(10,2) NOT NULL,
     stock_quantity INT DEFAULT 0,
+    sold_quantity INT DEFAULT 0 AFTER stock_quantity,
     image VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES Categories(category_id)
+    FOREIGN KEY (category_id) REFERENCES Categories(category_id),
+    FOREIGN KEY (brand_id) REFERENCES Brands(brand_id)
 );
 
 -- Bảng đơn hàng
